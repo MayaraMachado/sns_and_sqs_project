@@ -1,0 +1,9 @@
+boto3==1.13.24
+Django==3.0.7
+django-rest-framework==0.1.0
+djangorestframework==3.11.0
+psycopg2-binary==2.8.5
+python-decouple==3.3
+redis==3.3.8
+django-celery-beat==1.5.
+celery==4.3.0

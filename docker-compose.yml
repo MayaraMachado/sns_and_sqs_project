@@ -1,0 +1,65 @@
+version: '3'
+
+services:
+    
+  ecommerce:
+    build: ./ecommerce
+    hostname: ecommerce
+    container_name: ecommerce_container
+    depends_on:
+        - postgres
+    volumes:
+      - ./ecommerce:/app
+    command: bash -c "python3 manage.py makemigrations && python3 manage.py migrate && python3 manage.py runserver 0.0.0.0:8000"
+    ports:
+        - "8000:8000"
+    networks:
+      - db
+
+  payment_gateway:
+    build: ./payment_gateway
+    hostname: payment_gateway
+    container_name: payment_gateway_container
+    depends_on:
+      - postgres
+    volumes:
+      - ./payment_gateway:/app/
+    command : bash -c "python3 manage.py makemigrations && python3 manage.py migrate && python3 manage.py runserver 0.0.0.0:8001"
+    ports:
+        - "8001:8001"
+    networks:
+      - db
+      - redis
+
+  postgres:
+    image: postgres
+    restart: always
+    volumes:
+      - $HOME/docker/volumes/postgres/estudos:/var/lib/postgresql/data
+    hostname: postgres
+    container_name: postgres
+    environment:
+      POSTGRES_PASSWORD: 123
+    ports:
+    - "5432:5432"
+    networks:
+      - db
+
+  redis:
+    image: redis:5.0.7
+    hostname: redis
+    container_name: redis
+    networks:
+      - redis
+    volumes:
+      - redis_data:/data
+
+networks:
+  ecommerce:
+  payment_gateway:
+  db:
+  redis:
+    
+volumes:
+  redis_data:
+    
