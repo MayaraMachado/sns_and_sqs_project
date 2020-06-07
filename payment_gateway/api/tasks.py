@@ -10,7 +10,6 @@ def verify_transaction_queue():
     sqs_connection = SQSConnection()
 
     queue_messages = sqs_connection.poll_queue_for_messages(settings.TRANSACTION_URL_QUEUE)
-    print(queue_messages)
     if 'Messages' in queue_messages and len(queue_messages['Messages']) >= 1:
         for message in queue_messages['Messages']:
             message_body = message['Body']

@@ -14,6 +14,6 @@ class BillingView(APIView):
         self.domain = BillingDomainService()
 
     def get(self, request, seller_id, format=None):
-        billing = self.domain.get_all(query_params={'seller_id':seller_id})
-        serializer = BillingSerializer(billing, many=True)
+        billing = self.domain.get(seller_id)
+        serializer = BillingSerializer(billing)
         return Response(serializer.data)

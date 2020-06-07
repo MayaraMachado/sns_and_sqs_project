@@ -13,7 +13,7 @@ class DomainServiceBase:
         return obj
 
     def get_all(self, query_params={}, orderby=[], select_related=[]):
-        return self.repository.get_all()
+        return self.repository.get_all(query_params, orderby, select_related)
 
     def get(self, query_params={}, select_related=[]):
         return self.repository.get(query_params, select_related)

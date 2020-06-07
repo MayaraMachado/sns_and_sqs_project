@@ -29,7 +29,7 @@ class PurchasetView(APIView):
     def post(self, request):
         serializer = PurchaseRequestSerializer(data=request.data)
         if serializer.is_valid():
-            purchase_data = self.domain.create(serializer.data)
+            purchase_data = self.domain.create(serializer.validated_data)
             response = PurchaseResponseSerializer(purchase_data)
             return Response(response.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

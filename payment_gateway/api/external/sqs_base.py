@@ -1,4 +1,5 @@
 import boto3
+import logging
 from django.conf import settings
 
 class SQSConnection:
@@ -41,10 +42,9 @@ class SQSConnection:
 
     def process_message_from_queue(self):
         queue_messages = poll_queue_for_messages()
-        print(queue_messages)
         if 'Messages' in queue_messages and len(queue_messages['Messages']) >= 1:
             for message in queue_messages['Messages']:
-                print(f"Processing message: {message['MessageId']} with text: {message['Body']}.")
+                logging.warning(f"Processing message: {message['MessageId']} with text: {message['Body']}.")
                 change_message_visibility_timeout(message['ReceiptHandle'])
 
     def delete_message_from_queue(self, queue_url, receipt_handle):

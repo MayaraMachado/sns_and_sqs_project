@@ -31,7 +31,8 @@ class PurchaseDomainService(DomainServiceBase):
 
     def create(self, purchase_data):
         purchase = Purchase()
-        products_list = self.product_domain.get_all(query_params={'pk__in': purchase_data['products']})
+        products_pk = [product["id"] for product in purchase_data['products']]
+        products_list = self.product_domain.get_all(query_params={'pk__in': products_pk})
 
         purchase.user = self.user_domain.get(query_params={'pk':purchase_data['user']})
         purchase.total_price = self.__calculate_total_price(products_list)

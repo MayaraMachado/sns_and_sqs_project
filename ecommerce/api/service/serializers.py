@@ -22,6 +22,7 @@ class ProductSerializer(serializers.ModelSerializer):
         fields = ['id', 'title', 'price', 'seller']
 
 class ProductMiniSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField()
     class Meta:
         model = Product
         fields = ['id']

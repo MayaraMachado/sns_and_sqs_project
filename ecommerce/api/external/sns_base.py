@@ -1,4 +1,5 @@
 import boto3
+import logging
 from django.conf import settings
 
 class SNSConnection:
@@ -38,7 +39,7 @@ class SNSConnection:
         for subscription in subscriptions['Subscriptions']:
             if subscription['Protocol'] == subscription_type and subscription['Endpoint'] == endpoint:
     
-                print(f"Unsubscribing {subscription['Endpoint']}")
+                logging.warning(f"Unsubscribing {subscription['Endpoint']}")
                 subscription_arn = subscription['SubscriptionArn']
                 self.sns_client.unsubscribe(SubscriptionArn=subscription_arn)
 

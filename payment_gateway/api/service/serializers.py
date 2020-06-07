@@ -2,8 +2,6 @@ from api.models import Billing
 from rest_framework import serializers
 
 
-class BillingSerializer(serializers.ModelSerializer):
+class BillingSerializer(serializers.Serializer):
+    seller_id = serializers.IntegerField()
     total_received = serializers.FloatField()
-    class Meta:
-        model = Billing
-        fields = ['pk', 'seller_id', 'total_received']
