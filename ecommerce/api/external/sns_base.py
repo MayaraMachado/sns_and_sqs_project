@@ -6,7 +6,7 @@ class SNSConnection:
 
     def __init__(self):
         '''
-            Instanciação do cliente SNS utilizando boto3;
+            Create instance of SNS client using boto3;
             
             
             Returns:
@@ -22,10 +22,22 @@ class SNSConnection:
             region_name='us-east-1')
 
     def create_subscription(self, topic_arn, subscription_type, endpoint):
+        '''
+        '''
+
         return self.sns_client.subscribe(
             TopicArn=topic_arn,
             Protocol=subscription_type,
-            Endpoint=endpoint
+            Endpoint=endpoint,
+            Attributes={
+                "FilterPolicy" = {
+                            "event_type": [
+                                "order_placed",
+                                "order_cancelled"
+                            ]
+                        }
+                }
+            }
         )
 
     def get_topic_subscriptions(self, topic_arn):
@@ -43,9 +55,10 @@ class SNSConnection:
                 subscription_arn = subscription['SubscriptionArn']
                 self.sns_client.unsubscribe(SubscriptionArn=subscription_arn)
 
-    def publish_message_to_subscribers(self, topic_arn, message):
+    def publish_message_to_subscribers(self, topic_arn, message, message_attributes={}):
         publish = self.sns_client.publish(
                                             TopicArn=topic_arn,
-                                            Message=message
+                                            Message=message,
+                                            MessageAttributes = message_attributes
                                         )
         return publish

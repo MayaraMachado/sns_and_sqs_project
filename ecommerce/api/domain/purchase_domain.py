@@ -26,7 +26,15 @@ class PurchaseDomainService(DomainServiceBase):
                     "purchase_id" : str(purchase.pk),
                     "total_price" : str(purchase.total_price)
         }
-        self.sns_connection.publish_message_to_subscribers(settings.TRANSACTION_TOPIC_SNS, json.dumps(message))
+
+        message_attributes = {
+            'event_type': {
+                'DataType': 'String',
+                'StringValue': 'order_placed'
+            }
+        }
+
+        self.sns_connection.publish_message_to_subscribers(settings.TRANSACTION_TOPIC_SNS, json.dumps(message), message_attributes)
 
 
     def create(self, purchase_data):
