@@ -17,6 +17,9 @@ class PurchaseDomainService(DomainServiceBase):
         prices = list(products.values_list('price', flat=True))
         return sum(prices)
 
+    def __mask_card(self, card_number):
+        return f"**** **** **** {card_number[-4:]}"
+
     def __notificate_transaction_sns(self, purchase):
         products = purchase.product.all()
         seller = products[0].seller.pk
@@ -37,22 +40,26 @@ class PurchaseDomainService(DomainServiceBase):
         self.sns_connection.publish_message_to_subscribers(settings.TRANSACTION_TOPIC_SNS, json.dumps(message), message_attributes)
 
 
-    def create(self, purchase_data):
-        purchase = Purchase()
-        products_pk = [product["id"] for product in purchase_data['products']]
+    def create(self, purchase_data, user):
+        ## Criar compra
+        credit_card_data = purchase_data.pop('credit_card')
+        credit_card_data['card_number'] = self.__mask_card(credit_card_data.pop('card_number'))
+
+
+        products_pk = [product["product_id"] for product in purchase_data.pop('products')]
         products_list = self.product_domain.get_all(query_params={'pk__in': products_pk})
 
-        purchase.user = self.user_domain.get(query_params={'pk':purchase_data['user']})
-        purchase.total_price = self.__calculate_total_price(products_list)
+        purchase_data['user'] = self.user_domain.get(query_params={'username':user.username})
+        purchase_data['total_price'] = self.__calculate_total_price(products_list)
         
-        purchase_dict = purchase.__dict__
-        purchase_dict.pop('_state')
-        purchase = self.repository.create(purchase.__dict__)
+        # purchase_dict = purchase.__dict__
+        # purchase_dict.pop('_state')
+        purchase = self.repository.create(purchase_data, credit_card_data)
         
         purchase.product.add(*list(products_list))
         self.repository.update_m2m(purchase)
         
-        self.__notificate_transaction_sns(purchase)
+        # self.__notificate_transaction_sns(purchase)
 
         return purchase
 
