@@ -30,14 +30,13 @@ class SNSConnection:
             Protocol=subscription_type,
             Endpoint=endpoint,
             Attributes={
-                "FilterPolicy" = {
+                "FilterPolicy" : {
                             "event_type": [
                                 "order_placed",
                                 "order_cancelled"
                             ]
                         }
                 }
-            }
         )
 
     def get_topic_subscriptions(self, topic_arn):
