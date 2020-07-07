@@ -15,13 +15,20 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import include, path
-from api.service.product_view import ProductstList
+from rest_framework_jwt.views import obtain_jwt_token, refresh_jwt_token
+from api.service.product_view import ProductstView
 from api.service.purchase_view import PurchasetView
+from api.service.user_view import UserView
+from api.service.seller_view import SellerView
 
-# Wire up our API using automatic URL routing.
-# Additionally, we include login URLs for the browsable API.
 urlpatterns = [
-    path('products/', ProductstList.as_view()),
+    path('products/', ProductstView.as_view()),
     path('purchase/', PurchasetView.as_view()),
+    path('purchase/history/', PurchasetView.as_view()),
+    path('user/', UserView.as_view()),
+    path('seller/', SellerView.as_view()),
+    path('seller/<str:id>', SellerView.as_view()),
     path('admin/', admin.site.urls),
+    path('login/', obtain_jwt_token),
+    path('refresh-token/', refresh_jwt_token),
 ]

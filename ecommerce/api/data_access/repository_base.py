@@ -9,7 +9,7 @@ class RepositoryBase:
         obj.delete()
 
     def create(self, obj):
-        return obj.save()
+        return self.model.objects.create(**obj)
 
     def get_all(self, query_params={}, orderby=[], select_related=[]):
         return self.model.objects.select_related(*select_related).filter(**query_params).order_by(*orderby)
