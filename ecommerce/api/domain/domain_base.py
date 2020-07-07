@@ -9,7 +9,7 @@ class DomainServiceBase:
         self.repository.delete(obj)
 
     def create(self, obj):
-        obj = self.repository.inserir(obj)
+        obj = self.repository.create(obj)
         return obj
 
     def get_all(self, query_params={}, orderby=[], select_related=[]):
