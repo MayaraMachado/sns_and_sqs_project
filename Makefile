@@ -9,3 +9,6 @@ shell_ecommerce:
 
 shell_payment:
 	docker exec -it payment_gateway_container bash
+
+psql:
+	docker exec -it postgres psql -U postgres
