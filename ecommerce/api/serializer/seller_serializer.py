@@ -3,7 +3,7 @@ from api.models import Seller
 
 
 class SellerSerializer(serializers.ModelSerializer):
-    id = serializers.IntegerField(required=False)
+    seller_id = serializers.UUIDField(required=False)
     class Meta:
         model = Seller
-        fields = ['id', 'name']  
+        fields = ['seller_id', 'name']  
