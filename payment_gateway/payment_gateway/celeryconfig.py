@@ -5,6 +5,8 @@ CELERY_APPS = [
     'api',
 ]
 
+CELERY_IMPORTS = ['api.tasks']
+
 
 BROKER_URL = 'redis://redis:6379/10'
 CELERY_RESULT_BACKEND = 'redis://redis:6379/10'

@@ -15,9 +15,9 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from api.service.billing_view import BillingView
+from api.service.revenue_view import RevenueView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('billing/<int:seller_id>', BillingView.as_view())
+    path('revenue/<str:seller_id>', RevenueView.as_view())
 ]
