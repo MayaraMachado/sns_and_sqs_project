@@ -62,7 +62,8 @@ class PurchaseDomainService(DomainServiceBase):
         purchase.product.add(*list(products_list))
         self.repository.update_m2m(purchase)
         
-        self.__notificate_transaction_sns(purchase)
+        if settings.USAR_AWS:
+            self.__notificate_transaction_sns(purchase)
 
         return purchase
 
