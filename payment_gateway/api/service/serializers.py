@@ -1,7 +1,7 @@
-from api.models import Billing
+from api.models import Revenue
 from rest_framework import serializers
 
 
-class BillingSerializer(serializers.Serializer):
-    seller_id = serializers.IntegerField()
-    total_received = serializers.FloatField()
+class RevenueSerializer(serializers.Serializer):
+    seller_id = serializers.UUIDField()
+    total_received = serializers.IntegerField()

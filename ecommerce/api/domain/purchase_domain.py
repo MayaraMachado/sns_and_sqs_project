@@ -17,14 +17,24 @@ class PurchaseDomainService(DomainServiceBase):
         prices = list(products.values_list('price', flat=True))
         return sum(prices)
 
+    def __mask_card(self, card_number):
+        return f"**** **** **** {card_number[-4:]}"
+
     def __notificate_transaction_sns(self, purchase):
         products = purchase.product.all()
-        seller = products[0].seller.pk
+        items = {}
+        for product in products:
+            seller = str(product.seller_id)
+            if seller in items:
+                items[seller] += product.price
+            else:
+                items[seller] = product.price
+
+
         message = {
-                    "seller" : str(seller),
+                    "items" : items,
                     "purchase_date" :  purchase.created_at.strftime("%Y-%m-%d %H:%M:%S %Z"),
                     "purchase_id" : str(purchase.pk),
-                    "total_price" : str(purchase.total_price)
         }
 
         message_attributes = {
@@ -36,18 +46,18 @@ class PurchaseDomainService(DomainServiceBase):
 
         self.sns_connection.publish_message_to_subscribers(settings.TRANSACTION_TOPIC_SNS, json.dumps(message), message_attributes)
 
+    def create(self, purchase_data, user):
+        ## Criar compra
+        credit_card_data = purchase_data.pop('credit_card')
+        credit_card_data['card_number'] = self.__mask_card(credit_card_data.pop('card_number'))
 
-    def create(self, purchase_data):
-        purchase = Purchase()
-        products_pk = [product["id"] for product in purchase_data['products']]
+        products_pk = [product["product_id"] for product in purchase_data.pop('products')]
         products_list = self.product_domain.get_all(query_params={'pk__in': products_pk})
 
-        purchase.user = self.user_domain.get(query_params={'pk':purchase_data['user']})
-        purchase.total_price = self.__calculate_total_price(products_list)
+        purchase_data['user'] = self.user_domain.get(query_params={'username':user.username})
+        purchase_data['total_price'] = self.__calculate_total_price(products_list)
         
-        purchase_dict = purchase.__dict__
-        purchase_dict.pop('_state')
-        purchase = self.repository.create(purchase.__dict__)
+        purchase = self.repository.create(purchase_data, credit_card_data)
         
         purchase.product.add(*list(products_list))
         self.repository.update_m2m(purchase)
