@@ -2,6 +2,9 @@ class RepositoryBase:
     def __init__(self, model):
         self.model = model
 
+    def bulk_create(self, objects):
+        self.model.objects.bulk_create(objects)
+
     def update(self, obj, updated_data={}):
         return obj.save(**updated_data)
 

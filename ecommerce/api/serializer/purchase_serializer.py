@@ -14,7 +14,7 @@ class PurchaseResponseSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Purchase
-        fields = ['purchase_id', 'client_id', 'total_price', 'credit_card', 'product']
+        fields = ['purchase_id', 'client', 'total_price', 'credit_card', 'product']
 
 class PurchaseRequestSerializer(serializers.ModelSerializer):
     products = ProductMiniSerializer(many=True)
