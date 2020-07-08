@@ -17,9 +17,13 @@ class SellerView(APIView):
     def __init__(self):
         self.domain = SellerDomainService()
 
-    def get(self, request, id, format=None):
-        seller = self.domain.get(query_params={'pk':id})
-        serializer = SellerSerializer(seller)
+    def get(self, request, id=None, format=None):
+        if id:
+            seller = self.domain.get(query_params={'pk':id})
+            serializer = SellerSerializer(seller)
+        else:
+            seller = self.domain.get_all()
+            serializer = SellerSerializer(seller, many=True)
         return Response(serializer.data)
 
     def post(self, request):
