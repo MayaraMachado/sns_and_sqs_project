@@ -21,7 +21,6 @@ class PurchaseDomainService(DomainServiceBase):
         return f"**** **** **** {card_number[-4:]}"
 
     def __notificate_transaction_sns(self, purchase):
-        print(purchase.created_at)
         products = purchase.product.all()
         items = {}
         for product in products:
