@@ -22,13 +22,13 @@ from api.service.user_view import UserView
 from api.service.seller_view import SellerView
 
 urlpatterns = [
-    path('products/', ProductstView.as_view()),
-    path('purchase/', PurchasetView.as_view()),
-    path('purchase/history/', PurchasetView.as_view()),
-    path('user/', UserView.as_view()),
-    path('seller/', SellerView.as_view()),
-    path('seller/<str:id>', SellerView.as_view()),
+    path('products/', ProductstView.as_view(), name='products'),
+    path('purchase/', PurchasetView.as_view(), name='purchase'),
+    path('purchase/history/', PurchasetView.as_view(), name='purchase-history'),
+    path('user/', UserView.as_view(), name='user'),
+    path('seller/', SellerView.as_view(), name='seller'),
+    path('seller/<str:id>', SellerView.as_view(), name='seller-id'),
     path('admin/', admin.site.urls),
-    path('login/', obtain_jwt_token),
-    path('refresh-token/', refresh_jwt_token),
+    path('login/', obtain_jwt_token, name='login'),
+    path('refresh-token/', refresh_jwt_token, name='refresh-token'),
 ]

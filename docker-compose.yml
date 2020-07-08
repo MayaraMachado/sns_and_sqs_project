@@ -7,7 +7,7 @@ services:
     hostname: ecommerce
     container_name: ecommerce_container
     depends_on:
-        - postgres
+        - postgres_db
     volumes:
       - ./ecommerce:/app
     command: bash -c "python3 manage.py makemigrations && python3 manage.py migrate && python3 manage.py runserver 0.0.0.0:8000"
@@ -21,7 +21,7 @@ services:
     hostname: payment_gateway
     container_name: payment_gateway_container
     depends_on:
-      - postgres
+      - postgres_db
     volumes:
       - ./payment_gateway:/app/
     command : bash -c "python3 manage.py makemigrations && python3 manage.py migrate && python3 manage.py runserver 0.0.0.0:8001"
@@ -31,7 +31,7 @@ services:
       - db
       - redis
 
-  postgres:
+  postgres_db:
     image: postgres
     restart: always
     volumes:
@@ -62,7 +62,7 @@ services:
     command: bash -c "celery worker -A payment_gateway --loglevel=INFO -B"
     depends_on:
       - redis
-      - postgres
+      - postgres_db
     networks:
       - redis
       - db

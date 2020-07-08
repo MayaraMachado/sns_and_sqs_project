@@ -9,11 +9,8 @@ def verify_transaction_queue():
     revenue_domain = RevenueDomainService()
     sqs_connection = SQSConnection()
 
-    print('aaaaa')
-
     queue_messages = sqs_connection.poll_queue_for_messages(settings.TRANSACTION_URL_QUEUE)
     if 'Messages' in queue_messages and len(queue_messages['Messages']) >= 1:
-        print(queue_messages)
         for message in queue_messages['Messages']:
             message_body = message['Body']
             receipt_handle = message['ReceiptHandle']

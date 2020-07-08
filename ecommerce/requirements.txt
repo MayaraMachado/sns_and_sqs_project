@@ -6,3 +6,6 @@ djangorestframework==3.11.0
 psycopg2-binary==2.8.5
 python-decouple==3.3
 djangorestframework-jwt
+pytest
+pytest-django
+pytest-cov

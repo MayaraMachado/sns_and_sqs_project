@@ -7,3 +7,6 @@ python-decouple==3.3
 redis==3.3.8
 django-celery-beat==1.5.
 celery==4.3.0
+pytest
+pytest-django
+pytest-cov
