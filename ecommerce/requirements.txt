@@ -1,5 +1,5 @@
 boto3==1.13.24
-Django==3.0.7
+Django==3.1.13
 celery==4.3.0
 django-rest-framework==0.1.0
 djangorestframework==3.11.0
