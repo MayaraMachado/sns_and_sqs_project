@@ -5,7 +5,7 @@ djangorestframewor>=3.15.2
 psycopg2-binary==2.8.5
 python-decouple==3.3
 redis==3.3.8
-django-celery-beat==1.5.
+django-celery-beat>=1.5
 celery==5.2.2
 pytest
 pytest-django
